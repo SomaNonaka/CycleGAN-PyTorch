@@ -1,2 +1,2 @@
-# CycleGAN-Simple
+# CycleGAN-PyTorch
 Simple PyTorch implementation of CycleGAN
