@@ -1,12 +1,11 @@
 import os
 import argparse
-
 import torch
 from torch import optim
 from tensorboardX import SummaryWriter
-
 from model import Generator, Discriminator
-from load_animal_image import load_data
+# from load_animal_image import load_data
+from load_maps import load_data
 from utils import set_requires_grad, ImageBuffer
 
 parser = argparse.ArgumentParser('Train CycleGAN')
@@ -19,6 +18,7 @@ parser.add_argument('--epoch', type=int, default=200)
 parser.add_argument('--batch', type=int, default=1)
 parser.add_argument('--beta1', type=float, default=0.5)
 parser.add_argument('--lambda_', type=float, default=10.0)
+parser.add_argument('--lambda_idt', type=float, default=0.0)
 parser.add_argument('--lr', type=float, default=0.0002)
 parser.add_argument('--data', type=str, default='./train', help='directory that contains training data')
 parser.add_argument('--model', type=str, default='./model', help='save trained model to this directory')
@@ -83,7 +83,14 @@ for epoch in range(opt.epoch):
         G_cyc_loss = torch.mean((X.detach() - X_rec) ** 2)
         F_cyc_loss = torch.mean((Y.detach() - Y_rec) ** 2)
 
-        gen_loss = G_ad_loss + F_ad_loss + opt.lambda_ * (G_cyc_loss + F_cyc_loss)
+        if opt.lambda_idt > 0:
+            G_idt_loss = torch.mean(torch.abs(G(X) - X)) * opt.lambda_idt
+            F_idt_loss = torch.mean(torch.abs(F(Y) - Y)) * opt.lambda_idt
+        else:
+            G_idt_loss = 0
+            F_idt_loss = 0
+
+        gen_loss = G_ad_loss + F_ad_loss + opt.lambda_ * (G_cyc_loss + F_cyc_loss + G_idt_loss + F_idt_loss)
         gen_loss.backward()
         g_optimizer.step()
 

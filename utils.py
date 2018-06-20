@@ -1,7 +1,7 @@
 import numpy as np
 
 
-# https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix/blob/master/models/base_model.py
+# from https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix/blob/master/models/base_model.py
 def set_requires_grad(nets, requires_grad=False):
     if not isinstance(nets, list):
         nets = [nets]
@@ -22,7 +22,7 @@ class ImageBuffer:
             return image
         else:
             self.buffer.append(image)
-            return_ind = np.random.randint(50)
+            return_ind = np.random.randint(self.max_buffer_size)
             out = self.buffer[return_ind].clone()
             del self.buffer[return_ind]
             return out

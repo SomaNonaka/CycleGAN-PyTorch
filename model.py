@@ -84,18 +84,15 @@ class Discriminator(nn.Module):
         self.bn2 = nn.BatchNorm2d(sc_channel * 2)
         self.conv3 = nn.Conv2d(sc_channel * 2, sc_channel * 4, 4, 2, 1)
         self.bn3 = nn.BatchNorm2d(sc_channel * 4)
-        self.conv4 = nn.Conv2d(sc_channel * 4, sc_channel * 8, 4, 2, 1)
+        self.conv4 = nn.Conv2d(sc_channel * 4, sc_channel * 8, 4, 1, 1)
         self.bn4 = nn.BatchNorm2d(sc_channel * 8)
-        self.conv5 = nn.Conv2d(sc_channel * 8, sc_channel * 8, 4, 1, 0)
-        self.bn5 = nn.BatchNorm2d(sc_channel * 8)
-        self.conv6 = nn.Conv2d(sc_channel * 8, 1, 4, 1, 0)
+        self.conv5 = nn.Conv2d(sc_channel * 8, 1, 4, 1, 1)
 
     def forward(self, x):
         out = F.leaky_relu(self.conv1(x), 0.2, True)
         out = F.leaky_relu(self.bn2(self.conv2(out)), 0.2, True)
         out = F.leaky_relu(self.bn3(self.conv3(out)), 0.2, True)
         out = F.leaky_relu(self.bn4(self.conv4(out)), 0.2, True)
-        out = F.leaky_relu(self.bn5(self.conv5(out)), 0.2, True)
-        out = self.conv6(out)
+        out = self.conv5(out)
 
         return out
