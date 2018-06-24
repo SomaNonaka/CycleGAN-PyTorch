@@ -5,8 +5,7 @@ import torch
 from torch.utils.data import TensorDataset, DataLoader
 from torchvision import transforms
 
-key = ['trainA', 'trainB']
-def load_data(file_dir, batch_size):
+def load_data(file_dir, batch_size, key):
 
     transform = transforms.Compose([
         transforms.Resize((256, 256)),

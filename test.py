@@ -2,16 +2,16 @@ import os
 import argparse
 import torch
 from model import Generator, Discriminator
-# from load_animal_image import load_data
-from load_maps import load_data
+from load_animal_image import load_data
+# from load_maps import load_data
 from scipy.misc import imsave
 
-parser = argparse.ArgumentParser('Train CycleGAN')
+parser = argparse.ArgumentParser()
 parser.add_argument('--channel1', type=int, default=3)
 parser.add_argument('--channel2', type=int, default=3)
 parser.add_argument('--n_dim', type=int, default=64, help='number of channels of first convolution')
 parser.add_argument('--n_res', type=int, default=9, help='number of resnet block in generator')
-parser.add_argument('--batch', type=int, default=10)
+parser.add_argument('--batch', type=int, default=2)
 parser.add_argument('--data', type=str, default='./test', help='directory that contains test data')
 parser.add_argument('--model', type=str, default='./model', help='load trained model from this directory')
 parser.add_argument('--sample', type=str, default='./sample', help='save sample images to this directory')
@@ -34,14 +34,14 @@ D_X.load_state_dict(torch.load(os.path.join(opt.model, 'D_X_200.pth')))
 D_Y.load_state_dict(torch.load(os.path.join(opt.model, 'D_Y_200.pth')))
 
 # GPU setting
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+device = torch.device('cuda:1' if torch.cuda.is_available() else 'cpu')
 G.to(device)
 F.to(device)
 D_X.to(device)
 D_Y.to(device)
 
 # prepare dataset
-dataloader = load_data(opt.data, opt.batch)
+dataloader = load_data(opt.data, opt.batch, key=['Bengal', 'Bombay'])
 
 # convert images and save
 for i, (X, Y) in enumerate(dataloader):

@@ -6,9 +6,7 @@ import torch
 from torch.utils.data import TensorDataset, DataLoader
 from torchvision import transforms
 
-
-def load_data(file_dir, batch_size):
-    key = ['Bengal', 'Bombay']
+def load_data(file_dir, batch_size, key):
 
     transform = transforms.Compose([
         transforms.Resize((256, 256)),

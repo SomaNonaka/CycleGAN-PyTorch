@@ -4,8 +4,8 @@ import torch
 from torch import optim
 from tensorboardX import SummaryWriter
 from model import Generator, Discriminator
-# from load_animal_image import load_data
-from load_maps import load_data
+from load_animal_image import load_data
+# from load_maps import load_data
 from utils import set_requires_grad, ImageBuffer
 
 parser = argparse.ArgumentParser('Train CycleGAN')
@@ -50,7 +50,7 @@ g_optimizer = optim.Adam(g_params, opt.lr, (opt.beta1, 0.999))
 d_optimizer = optim.Adam(d_params, opt.lr, (opt.beta1, 0.999))
 
 # prepare dataset
-dataloader = load_data(opt.data, opt.batch)
+dataloader = load_data(opt.data, opt.batch, key=['Bengal', 'Bombay'])
 
 # Buffer that contain fake images
 buffer_X = ImageBuffer(opt.buffer)
